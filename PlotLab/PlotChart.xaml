@@ -1,0 +1,17 @@
+﻿<UserControl
+    x:Class="PlotLab.PlotChart"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:PlotLab"
+    mc:Ignorable="d"
+    Loaded="Component_Loaded"
+    d:DesignHeight="480"
+    d:DesignWidth="700">
+    <Viewbox
+        Stretch="Fill">
+        <Image
+            x:Name="PlotBox" />
+    </Viewbox>
+</UserControl>
