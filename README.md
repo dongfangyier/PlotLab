@@ -11,7 +11,7 @@ a plot library can be used in WPF project
 We can use this library in the following ways.
 first of all,make sure you are in a wpf project
 
-you can add this like a User Control Library.
+you can download and add this like a User Control Library.and also you can get it from nuget.
 #### For Example
     xmlns:controler="clr-namespace:PlotLab;assembly=PlotLab"
 #### and then you can use like follow
