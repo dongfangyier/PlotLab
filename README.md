@@ -12,6 +12,9 @@ We can use this library in the following ways.
 first of all,make sure you are in a wpf project
 
 you can download and add this like a User Control Library.and also you can get it from nuget.
+
+https://www.nuget.org/packages/PlotLab/1.0.0
+
 #### For Example
     xmlns:controler="clr-namespace:PlotLab;assembly=PlotLab"
 #### and then you can use like follow
