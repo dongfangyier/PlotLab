@@ -12,9 +12,13 @@ namespace PlotLab
     {
         public List<SequenceEntity> PlotChartPoints = new List<SequenceEntity>();
         private int count = 0;
+        public PaintMode Mode = PaintMode.REPAINT_PER_DATA;
+        public List<int> HasDrawed = new List<int>();
 
-        public Sequence(List<SequenceEntity> entities)
+        public Sequence(List<SequenceEntity> entities, PaintMode mode = PaintMode.REPAINT_PER_DATA)
         {
+            PlotChartPoints.Clear();
+            HasDrawed.Clear();
             for (int i = 0; i < entities.Count; i++)
             {
                 if (entities[i].Color == null)
@@ -22,12 +26,14 @@ namespace PlotLab
                     entities[i].Color = MyPens.getEntityByIndex(count);
                 }
                 PlotChartPoints.Add(entities[i]);
+                HasDrawed.Add(entities[i].Values.Count); // because the first time will always repaint
                 count++;
                 if (count > 9)
                 {
                     count = 0;
                 }
             }
+            Mode = mode;
         }
 
         public bool IsNull()
@@ -80,6 +86,26 @@ namespace PlotLab
                 }
             }
             return max;
+        }
+
+        internal void ClearData()
+        {
+            for(int i = 0; i < PlotChartPoints.Count; i++)
+            {
+                PlotChartPoints[i].Values.Clear();
+                HasDrawed[i] = 0;
+            }
+        }
+
+        internal bool ClearDataByIndex(int index)
+        {
+            if(index>= PlotChartPoints.Count)
+            {
+                return false;
+            }
+            PlotChartPoints[index].Values.Clear();
+            HasDrawed[index] = 0;
+            return true;
         }
     }
 
@@ -150,5 +176,11 @@ namespace PlotLab
             }
             return color;
         }
+    }
+
+    public enum PaintMode
+    {
+        REPAINT_PER_DATA = 0,
+        NO_REPAINT = 1
     }
 }
