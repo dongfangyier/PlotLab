@@ -16,7 +16,7 @@ first of all,make sure you are in a wpf project
 you can download and add this like a User Control Library.and also you can get it from nuget.
 
 more information: 
-https://www.nuget.org/packages/PlotLab/1.0.1
+https://www.nuget.org/packages/PlotLab/1.0.2
 
 #### For Example
     xmlns:controler="clr-namespace:PlotLab;assembly=PlotLab"
