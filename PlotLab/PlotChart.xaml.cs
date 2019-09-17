@@ -294,13 +294,13 @@ namespace PlotLab
             float diff = (float)Math.Round((max - min) / 6, 2);
             int pointnum = Sequence.GetMaxLength();
             int HeightPerPot = _Height / 8;
-            int WidthPerPot = _Width / pointnum;
+            int WidthPerPot = (_Width - 35) / pointnum;
 
             PointF cpt = new PointF(diff.ToString().Length + 35, _Height - 50);// centre point
 
             G.DrawString(Title, new Font("宋体", 14), Brushes.Black, new PointF(cpt.X + _Width / 2 - 80, cpt.X));// title
             // x axis
-            G.DrawLine(Pens.Black, cpt.X, cpt.Y, _Width - cpt.X, cpt.Y);
+            G.DrawLine(Pens.Black, cpt.X, cpt.Y, _Width - cpt.X + 35, cpt.Y);
             // y axis
             G.DrawLine(Pens.Black, cpt.X, cpt.Y, cpt.X, _Height - cpt.Y);
 

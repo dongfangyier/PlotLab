@@ -124,11 +124,19 @@ namespace PlotLab
 
         public float GetMax()
         {
+            if (Values.Count == 0)
+            {
+                return 1;
+            }
             return Values.Max();
         }
 
         public float GetMin()
         {
+            if (Values.Count == 0)
+            {
+                return 0;
+            }
             return Values.Min();
         }
     }
