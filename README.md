@@ -11,11 +11,14 @@ a plot library can be used in WPF project
 We can use this library in the following ways.
 first of all,make sure you are in a wpf project
 
-you can add this like a User Control.
+you can add this like a User Control Library.
 #### For Example
-    xmlns:controler="clr-namespace:PlotLab"
+    xmlns:controler="clr-namespace:PlotLab;assembly=PlotLab"
 #### and then you can use like follow
     <controler:PlotChart x:Name="plot"/>
+#### and you must add reference in your code file
+    using System.Drawing;
+    using PlotLab;
 #### you can add point of data like follow:
       plot.Sequence = new Sequence(new List<SequenceEntity>() {
                 new SequenceEntity(new List<float>() { 1,2,3,4,5,6,7}),
