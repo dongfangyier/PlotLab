@@ -18,12 +18,12 @@ https://www.nuget.org/packages/PlotLab/1.0.0
 
 #### For Example
     xmlns:controler="clr-namespace:PlotLab;assembly=PlotLab"
-#### and then you can use like follow
+#### and then you can add component like follow
     <controler:PlotChart x:Name="plot"/>
 #### and you must add reference in your code file
     using System.Drawing;
     using PlotLab;
-#### you can add point of data like follow:
+#### you can add data points as below:
       plot.Sequence = new Sequence(new List<SequenceEntity>() {
                 new SequenceEntity(new List<float>() { 1,2,3,4,5,6,7}),
                 new SequenceEntity(new List<float>() { 0,5,3,4,5,6,7},Pens.Brown,"example 1"),
@@ -46,7 +46,12 @@ https://www.nuget.org/packages/PlotLab/1.0.0
 ### more information of Sequence
 | order | Attribute|function
 |---|---|---|
-| 0| PlotChartPoints | the data list you want to show,it contains a list of float and a list of colour and title of the list |
-
+| 0| PlotChartPoints | a list of SequenceEntity |
+### more information of SequenceEntity
+| order | Attribute|function
+|---|---|---|
+| 0| Values | list of data that youwant to show |
+| 1| Title|the title of this curve|
+| 2 | Color|the colour of the curve|
     
     
