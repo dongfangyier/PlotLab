@@ -93,7 +93,7 @@ namespace PlotLab
             }
         }
 
-        public bool Update
+        public bool _UpdatePlot
         {
             get { return updatePlot; }
             set
