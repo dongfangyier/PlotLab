@@ -24,46 +24,41 @@ namespace PlotLab
         private int height = 480;
         private Sequence seq = null;
         private string title = string.Empty;
-        private int pointNum = 50;
         private bool updatePlot = false;
         private bool clearData = false;
         private int clearDataByIndex = -1;
 
         public int PointNum
         {
-            get { return pointNum; }
+            get { return (int)GetValue(PointNumProperty); }
             set
             {
                 SetValue(PointNumProperty, value);
-                pointNum = (int)GetValue(PointNumProperty);
             }
         }
 
         public string Title
         {
-            get { return title; }
+            get { return (string)GetValue(TitleProperty); }
             set
             {
                 SetValue(TitleProperty, value);
-                title= (string)GetValue(TitleProperty);
             }
         }
         public float _MaxValue
         {
-            get { return maxValue; }
+            get { return (float)GetValue(MaxValueProperty); }
             set
             {
                 SetValue(MaxValueProperty, value);
-                maxValue = (float)GetValue(MaxValueProperty);
             }
         }
         public float _MinValue
         {
-            get { return minValue; }
+            get { return (float)GetValue(MinValueProperty); }
             set
             {
                 SetValue(MinValueProperty, value);
-                minValue = (float)GetValue(MinValueProperty);
             }
         }
         internal int _Width
@@ -83,57 +78,12 @@ namespace PlotLab
             }
         }
 
-        public Sequence Sequence
+        public Sequence _Sequence
         {
-            get { return seq; }
+            get { return (Sequence)GetValue(SequenceProperty); }
             set
             {
                 SetValue(SequenceProperty, value);
-                seq= (Sequence)GetValue(SequenceProperty);
-            }
-        }
-
-        public bool _UpdatePlot
-        {
-            get { return updatePlot; }
-            set
-            {
-                SetValue(UpdatePlotProperty, value);
-                updatePlot = (bool)GetValue(UpdatePlotProperty);
-                if (updatePlot)
-                {
-                    UpdatePlot();
-                }
-                updatePlot = false;
-            }
-        }
-
-        public bool _ClearData
-        {
-            get { return clearData; }
-            set
-            {
-                SetValue(ClearDataProperty, value);
-                clearData = (bool)GetValue(ClearDataProperty);
-                if (clearData)
-                {
-                    ClearData();
-                }
-                clearData = false;
-            }
-        }
-        public int _ClearDataByIndex
-        {
-            get { return clearDataByIndex; }
-            set
-            {
-                SetValue(ClearDataByIndexProperty, value);
-                clearDataByIndex = (int)GetValue(ClearDataByIndexProperty);
-                if (clearDataByIndex > -1)
-                {
-                    ClearDataByIndex(clearDataByIndex);
-                }
-                clearDataByIndex = -1;
             }
         }
 
@@ -150,41 +100,13 @@ namespace PlotLab
         public PlotChart()
         {
             InitializeComponent();
-
-            Binding bind_MinValue = new Binding("_MinValue") { Source = this };
-            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_MinValue);
-
-            Binding bind_MaxValue = new Binding("_MaxValue") { Source = this };
-            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_MaxValue);
-
-            Binding bindSequence = new Binding("Sequence") { Source = this };
-            this.PlotBox.SetBinding(TextBlock.TextProperty, bindSequence);
-
-            Binding bindTitle = new Binding("Title") { Source = this };
-            this.PlotBox.SetBinding(TextBlock.TextProperty, bindTitle);
-
-            Binding bindPointNum = new Binding("PointNum") { Source = this };
-            this.PlotBox.SetBinding(TextBlock.TextProperty, bindPointNum);
-
-            Binding bind_UpdatePlot = new Binding("_UpdatePlot") { Source = this };
-            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_UpdatePlot);
-
-            Binding bind_ClearData = new Binding("_ClearData") { Source = this };
-            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_ClearData);
-
-            Binding bind_ClearDataByIndex = new Binding("_ClearDataByIndex") { Source = this };
-            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_ClearDataByIndex);
-
         }
         // define depandency property
-        public static readonly DependencyProperty MinValueProperty = DependencyProperty.Register("_MinValue", typeof(float), typeof(PlotChart));
-        public static readonly DependencyProperty MaxValueProperty = DependencyProperty.Register("_MaxValue", typeof(float), typeof(PlotChart));
-        public static readonly DependencyProperty SequenceProperty = DependencyProperty.Register("Sequence", typeof(Sequence), typeof(PlotChart));
+        public static readonly DependencyProperty MinValueProperty = DependencyProperty.Register("_MinValue", typeof(float), typeof(PlotChart),new PropertyMetadata(float.MinValue));
+        public static readonly DependencyProperty MaxValueProperty = DependencyProperty.Register("_MaxValue", typeof(float), typeof(PlotChart),new PropertyMetadata(float.MaxValue));
+        public static readonly DependencyProperty SequenceProperty = DependencyProperty.Register("_Sequence", typeof(Sequence), typeof(PlotChart));
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(PlotChart));
-        public static readonly DependencyProperty PointNumProperty = DependencyProperty.Register("PointNum", typeof(int), typeof(PlotChart));
-        public static readonly DependencyProperty UpdatePlotProperty = DependencyProperty.Register("_UpdatePlot", typeof(bool), typeof(PlotChart));
-        public static readonly DependencyProperty ClearDataProperty = DependencyProperty.Register("_ClearData", typeof(bool), typeof(PlotChart));
-        public static readonly DependencyProperty ClearDataByIndexProperty = DependencyProperty.Register("_ClearDataByIndex", typeof(int), typeof(PlotChart));
+        public static readonly DependencyProperty PointNumProperty = DependencyProperty.Register("PointNum", typeof(int), typeof(PlotChart),new PropertyMetadata(50));
 
 
         private void Component_Loaded(object sender, RoutedEventArgs e)
@@ -227,13 +149,13 @@ namespace PlotLab
 
         public void UpdatePlot()
         {
-            if (Sequence == null || Sequence.IsNull())
+            if (_Sequence == null || _Sequence.IsNull())
             {
                 CreateEmptyPlot();
                 return;
             }
             // repaint every data point
-            if (Sequence.Mode == PaintMode.REPAINT_PER_DATA)
+            if (_Sequence.Mode == PaintMode.REPAINT_PER_DATA)
             {
                 UpdateWholePlot();
             }
@@ -254,21 +176,21 @@ namespace PlotLab
 
         public void ClearData()
         {
-            if (Sequence == null)
+            if (_Sequence == null)
             {
                 return;
             }
-            Sequence.ClearData();
+            _Sequence.ClearData();
             IsEmpty = true;
         }
 
         public void ClearDataByIndex(int index)
         {
-            if (Sequence == null)
+            if (_Sequence == null)
             {
                 return;
             }
-            if (Sequence.ClearDataByIndex(index))
+            if (_Sequence.ClearDataByIndex(index))
             {
                 IsEmpty = true;
             }
@@ -282,7 +204,7 @@ namespace PlotLab
             G.Clear(Color.White);
 
             float diff = (float)Math.Round((_MaxValue - _MinValue) / 6, 2);
-            int pointnum = Sequence.GetMaxLength();
+            int pointnum = _Sequence.GetMaxLength();
             int HeightPerPot = _Height / 8;
             int WidthPerPot = (_Width - 35) / PointNum;
 
@@ -310,18 +232,18 @@ namespace PlotLab
             }
 
             int titlenum = 1;
-            for (int j = 0; j < Sequence.GetCount(); j++)
+            for (int j = 0; j < _Sequence.GetCount(); j++)
             {
-                float[] d = Sequence.PlotChartPoints[j].Values.ToArray();
-                Pen mycolor = Sequence.PlotChartPoints[j].Color;
-                string tempTitle = Sequence.PlotChartPoints[j].Title;
+                float[] d = _Sequence.PlotChartPoints[j].Values.ToArray();
+                Pen mycolor = _Sequence.PlotChartPoints[j].Color;
+                string tempTitle = _Sequence.PlotChartPoints[j].Title;
                 if (tempTitle != null)
                 {
                     G.DrawString(tempTitle, new Font("宋体", 8), Brushes.Black, new PointF(cpt.X + 30, cpt.X + titlenum * 24));//图表标题
                     G.DrawLine(mycolor, cpt.X + 120, cpt.X + titlenum * 24 + 10, cpt.X + 160, cpt.X + titlenum * 24 + 10);
                     titlenum++;
                 }
-                for (int i = 0; i < Sequence.PlotChartPoints[j].Values.Count; i++)
+                for (int i = 0; i < _Sequence.PlotChartPoints[j].Values.Count; i++)
                 {
                     G.DrawEllipse(Pens.Black, cpt.X + i * WidthPerPot - 1.5f, cpt.Y - (d[i] - _MinValue) / diff * HeightPerPot - 1.5f, 3, 3);
                     G.FillEllipse(new SolidBrush(Color.Black), cpt.X + i * WidthPerPot - 1.5f, cpt.Y - (d[i] - _MinValue) / diff * HeightPerPot - 1.5f, 3, 3);
@@ -339,19 +261,19 @@ namespace PlotLab
             G = Graphics.FromImage(Image);
 
             float diff = (float)Math.Round((_MaxValue - _MinValue) / 6, 2);
-            int pointnum = Sequence.GetMaxLength();
+            int pointnum = _Sequence.GetMaxLength();
             int HeightPerPot = _Height / 8;
             int WidthPerPot = (_Width-35) / PointNum;
 
             PointF cpt = new PointF(diff.ToString().Length + 35, _Height - 50);// centre point
-            for (int j = 0; j < Sequence.GetCount(); j++)
+            for (int j = 0; j < _Sequence.GetCount(); j++)
             {
-                float[] d = Sequence.PlotChartPoints[j].Values.ToArray();
-                Pen mycolor = Sequence.PlotChartPoints[j].Color;
+                float[] d = _Sequence.PlotChartPoints[j].Values.ToArray();
+                Pen mycolor = _Sequence.PlotChartPoints[j].Color;
 
-                for (int i = Sequence.HasDrawed[j]; i < Sequence.PlotChartPoints[j].Values.Count; i++)
+                for (int i = _Sequence.HasDrawed[j]; i < _Sequence.PlotChartPoints[j].Values.Count; i++)
                 {
-                    Sequence.HasDrawed[j]++;
+                    _Sequence.HasDrawed[j]++;
                     G.DrawEllipse(Pens.Black, cpt.X + i * WidthPerPot - 1.5f, cpt.Y - (d[i] - _MinValue) / diff * HeightPerPot - 1.5f, 3, 3);
                     G.FillEllipse(new SolidBrush(Color.Black), cpt.X + i * WidthPerPot - 1.5f, cpt.Y - (d[i] - _MinValue) / diff * HeightPerPot - 1.5f, 3, 3);
                     // draw broken line
@@ -369,12 +291,12 @@ namespace PlotLab
             G = Graphics.FromImage(Image);
             G.Clear(Color.White);
 
-            float max = Sequence.GetMaxValue();
+            float max = _Sequence.GetMaxValue();
             max = max > _MaxValue ? _MaxValue : max;
-            float min = Sequence.GetMinValue();
+            float min = _Sequence.GetMinValue();
             min = min < _MinValue ? _MinValue : min;
             float diff = (float)Math.Round((max - min) / 6, 2);
-            int pointnum = Sequence.GetMaxLength();
+            int pointnum = _Sequence.GetMaxLength();
             int HeightPerPot = _Height / 8;
             int WidthPerPot = (_Width - 35) / pointnum;
 
@@ -401,18 +323,18 @@ namespace PlotLab
             }
 
             int titlenum = 1;
-            for (int j = 0; j < Sequence.GetCount(); j++)
+            for (int j = 0; j < _Sequence.GetCount(); j++)
             {
-                float[] d = Sequence.PlotChartPoints[j].Values.ToArray();
-                Pen mycolor = Sequence.PlotChartPoints[j].Color;
-                string tempTitle = Sequence.PlotChartPoints[j].Title;
+                float[] d = _Sequence.PlotChartPoints[j].Values.ToArray();
+                Pen mycolor = _Sequence.PlotChartPoints[j].Color;
+                string tempTitle = _Sequence.PlotChartPoints[j].Title;
                 if (tempTitle != null)
                 {
                     G.DrawString(tempTitle, new Font("宋体", 8), Brushes.Black, new PointF(cpt.X + 30, cpt.X + titlenum * 24));//图表标题
                     G.DrawLine(mycolor, cpt.X + 120, cpt.X + titlenum * 24 + 10, cpt.X + 160, cpt.X + titlenum * 24 + 10);
                     titlenum++;
                 }
-                for (int i = 0; i < Sequence.PlotChartPoints[j].Values.Count; i++)
+                for (int i = 0; i < _Sequence.PlotChartPoints[j].Values.Count; i++)
                 {
                     G.DrawEllipse(Pens.Black, cpt.X + i * WidthPerPot - 1.5f, cpt.Y - (d[i] - min) / diff * HeightPerPot - 1.5f, 3, 3);
                     G.FillEllipse(new SolidBrush(Color.Black), cpt.X + i * WidthPerPot - 1.5f, cpt.Y - (d[i] - min) / diff * HeightPerPot - 1.5f, 3, 3);

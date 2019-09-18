@@ -5,17 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace PlotLab
 {
     public class Sequence
     {
-        public List<SequenceEntity> PlotChartPoints = new List<SequenceEntity>();
+        public ObservableCollection<SequenceEntity> PlotChartPoints = new ObservableCollection<SequenceEntity>();
         private int count = 0;
         public PaintMode Mode = PaintMode.REPAINT_PER_DATA;
         public List<int> HasDrawed = new List<int>();
 
-        public Sequence(List<SequenceEntity> entities, PaintMode mode = PaintMode.REPAINT_PER_DATA)
+        public Sequence(ObservableCollection<SequenceEntity> entities, PaintMode mode = PaintMode.REPAINT_PER_DATA)
         {
             PlotChartPoints.Clear();
             HasDrawed.Clear();
@@ -111,11 +112,11 @@ namespace PlotLab
 
     public class SequenceEntity
     {
-        public List<float> Values = new List<float>();
+        public ObservableCollection<float> Values = new ObservableCollection<float>();
         public Pen Color = null;
         public string Title = string.Empty;
 
-        public SequenceEntity(List<float> values, Pen color = null, string title = null)
+        public SequenceEntity(ObservableCollection<float> values, Pen color = null, string title = null)
         {
             Values = values;
             Color = color;
