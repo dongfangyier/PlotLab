@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
 namespace PlotLab
@@ -24,73 +25,119 @@ namespace PlotLab
         private Sequence seq = null;
         private string title = string.Empty;
         private int pointNum = 50;
+        private bool updatePlot = false;
+        private bool clearData = false;
+        private int clearDataByIndex = -1;
 
         public int PointNum
         {
-            get => pointNum;
+            get { return pointNum; }
             set
             {
-                pointNum = value;
-                UpdatePlot();
+                SetValue(PointNumProperty, value);
+                pointNum = (int)GetValue(PointNumProperty);
             }
         }
 
         public string Title
         {
-            get => title;
+            get { return title; }
             set
             {
-                title = value;
-                UpdatePlot();
+                SetValue(TitleProperty, value);
+                title= (string)GetValue(TitleProperty);
             }
         }
         public float _MaxValue
         {
-            get => maxValue;
+            get { return maxValue; }
             set
             {
-                maxValue = value;
-                UpdatePlot();
+                SetValue(MaxValueProperty, value);
+                maxValue = (float)GetValue(MaxValueProperty);
             }
         }
         public float _MinValue
         {
-            get => minValue;
+            get { return minValue; }
             set
             {
-                minValue = value;
-                UpdatePlot();
+                SetValue(MinValueProperty, value);
+                minValue = (float)GetValue(MinValueProperty);
             }
         }
-        public int _Width
+        internal int _Width
         {
             get => width;
             set
             {
                 width = value;
-                UpdatePlot();
             }
         }
-        public int _Height
+        internal int _Height
         {
             get => height;
             set
             {
                 height = value;
-                UpdatePlot();
             }
         }
 
         public Sequence Sequence
         {
-            get => seq;
+            get { return seq; }
             set
             {
-                seq = value;
-                // maybe we can update in several times later??
-                UpdatePlot();
+                SetValue(SequenceProperty, value);
+                seq= (Sequence)GetValue(SequenceProperty);
             }
         }
+
+        public bool Update
+        {
+            get { return updatePlot; }
+            set
+            {
+                SetValue(UpdatePlotProperty, value);
+                updatePlot = (bool)GetValue(UpdatePlotProperty);
+                if (updatePlot)
+                {
+                    UpdatePlot();
+                }
+                updatePlot = false;
+            }
+        }
+
+        public bool _ClearData
+        {
+            get { return clearData; }
+            set
+            {
+                SetValue(ClearDataProperty, value);
+                clearData = (bool)GetValue(ClearDataProperty);
+                if (clearData)
+                {
+                    ClearData();
+                }
+                clearData = false;
+            }
+        }
+        public int _ClearDataByIndex
+        {
+            get { return clearDataByIndex; }
+            set
+            {
+                SetValue(ClearDataByIndexProperty, value);
+                clearDataByIndex = (int)GetValue(ClearDataByIndexProperty);
+                if (clearDataByIndex > -1)
+                {
+                    ClearDataByIndex(clearDataByIndex);
+                }
+                clearDataByIndex = -1;
+            }
+        }
+
+
 
         #endregion
 
@@ -103,7 +150,42 @@ namespace PlotLab
         public PlotChart()
         {
             InitializeComponent();
+
+            Binding bind_MinValue = new Binding("_MinValue") { Source = this };
+            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_MinValue);
+
+            Binding bind_MaxValue = new Binding("_MaxValue") { Source = this };
+            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_MaxValue);
+
+            Binding bindSequence = new Binding("Sequence") { Source = this };
+            this.PlotBox.SetBinding(TextBlock.TextProperty, bindSequence);
+
+            Binding bindTitle = new Binding("Title") { Source = this };
+            this.PlotBox.SetBinding(TextBlock.TextProperty, bindTitle);
+
+            Binding bindPointNum = new Binding("PointNum") { Source = this };
+            this.PlotBox.SetBinding(TextBlock.TextProperty, bindPointNum);
+
+            Binding bind_UpdatePlot = new Binding("_UpdatePlot") { Source = this };
+            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_UpdatePlot);
+
+            Binding bind_ClearData = new Binding("_ClearData") { Source = this };
+            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_ClearData);
+
+            Binding bind_ClearDataByIndex = new Binding("_ClearDataByIndex") { Source = this };
+            this.PlotBox.SetBinding(TextBlock.TextProperty, bind_ClearDataByIndex);
+
         }
+        // define depandency property
+        public static readonly DependencyProperty MinValueProperty = DependencyProperty.Register("_MinValue", typeof(float), typeof(PlotChart));
+        public static readonly DependencyProperty MaxValueProperty = DependencyProperty.Register("_MaxValue", typeof(float), typeof(PlotChart));
+        public static readonly DependencyProperty SequenceProperty = DependencyProperty.Register("Sequence", typeof(Sequence), typeof(PlotChart));
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(PlotChart));
+        public static readonly DependencyProperty PointNumProperty = DependencyProperty.Register("PointNum", typeof(int), typeof(PlotChart));
+        public static readonly DependencyProperty UpdatePlotProperty = DependencyProperty.Register("_UpdatePlot", typeof(bool), typeof(PlotChart));
+        public static readonly DependencyProperty ClearDataProperty = DependencyProperty.Register("_ClearData", typeof(bool), typeof(PlotChart));
+        public static readonly DependencyProperty ClearDataByIndexProperty = DependencyProperty.Register("_ClearDataByIndex", typeof(int), typeof(PlotChart));
+
 
         private void Component_Loaded(object sender, RoutedEventArgs e)
         {
@@ -177,7 +259,7 @@ namespace PlotLab
                 return;
             }
             Sequence.ClearData();
-            UpdatePreNewPlot();
+            IsEmpty = true;
         }
 
         public void ClearDataByIndex(int index)
@@ -188,7 +270,7 @@ namespace PlotLab
             }
             if (Sequence.ClearDataByIndex(index))
             {
-                UpdatePreNewPlot();
+                IsEmpty = true;
             }
         }
 
