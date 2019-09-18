@@ -39,7 +39,7 @@ namespace PlotLab
 
         public bool IsNull()
         {
-            if (PlotChartPoints.Count == 0)
+            if (PlotChartPoints.Count == 0 || GetMaxLength() == 0)
             {
                 return true;
             }

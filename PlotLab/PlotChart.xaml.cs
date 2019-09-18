@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -24,9 +25,6 @@ namespace PlotLab
         private int height = 480;
         private Sequence seq = null;
         private string title = string.Empty;
-        private bool updatePlot = false;
-        private bool clearData = false;
-        private int clearDataByIndex = -1;
 
         public int PointNum
         {
@@ -87,6 +85,34 @@ namespace PlotLab
             }
         }
 
+        public bool _UpdatePlot
+        {
+            get { return (bool)GetValue(UpdatePlotProperty); }
+            set
+            {
+                SetValue(UpdatePlotProperty, value);
+                UpdatePlot();
+            }
+        }
+
+        public bool _ClearData
+        {
+            get { return (bool)GetValue(ClearDataProperty); }
+            set
+            {
+                SetValue(ClearDataProperty, value);
+              
+            }
+        }
+        public int _ClearDataByIndex
+        {
+            get { return (int)GetValue(ClearDataByIndexProperty); }
+            set
+            {
+                SetValue(ClearDataByIndexProperty, value);
+            }
+        }
+
 
 
         #endregion
@@ -100,6 +126,38 @@ namespace PlotLab
         public PlotChart()
         {
             InitializeComponent();
+            DependencyPropertyDescriptor UpdatePlotdp = DependencyPropertyDescriptor.FromProperty(UpdatePlotProperty, typeof(PlotChart));
+            UpdatePlotdp.AddValueChanged(this, delegate
+            {
+                if (_UpdatePlot)
+                {
+                    UpdatePlot();
+                }
+                _UpdatePlot = false;
+            });
+
+            DependencyPropertyDescriptor ClearDatadp = DependencyPropertyDescriptor.FromProperty(ClearDataProperty, typeof(PlotChart));
+            ClearDatadp.AddValueChanged(this, delegate
+            {
+                if (_ClearData)
+                {
+                    ClearData();
+                }
+                _ClearData = false;
+            });
+
+            DependencyPropertyDescriptor ClearDataByIndexdp = DependencyPropertyDescriptor.FromProperty(ClearDataByIndexProperty, typeof(PlotChart));
+            ClearDataByIndexdp.AddValueChanged(this, (o,args) =>
+            {
+                if (_ClearDataByIndex > -1)
+                {
+                    ClearDataByIndex(_ClearDataByIndex);
+                }
+                _ClearDataByIndex = -1;
+            });
+
+
+
         }
         // define depandency property
         public static readonly DependencyProperty MinValueProperty = DependencyProperty.Register("_MinValue", typeof(float), typeof(PlotChart),new PropertyMetadata(float.MinValue));
@@ -107,6 +165,9 @@ namespace PlotLab
         public static readonly DependencyProperty SequenceProperty = DependencyProperty.Register("_Sequence", typeof(Sequence), typeof(PlotChart));
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(PlotChart));
         public static readonly DependencyProperty PointNumProperty = DependencyProperty.Register("PointNum", typeof(int), typeof(PlotChart),new PropertyMetadata(50));
+        public static readonly DependencyProperty UpdatePlotProperty = DependencyProperty.Register("_UpdatePlot", typeof(bool), typeof(PlotChart), new PropertyMetadata(false));
+        public static readonly DependencyProperty ClearDataProperty = DependencyProperty.Register("_ClearData", typeof(bool), typeof(PlotChart), new PropertyMetadata(false));
+        public static readonly DependencyProperty ClearDataByIndexProperty = DependencyProperty.Register("_ClearDataByIndex", typeof(int), typeof(PlotChart), new PropertyMetadata(-1));
 
 
         private void Component_Loaded(object sender, RoutedEventArgs e)
@@ -151,7 +212,15 @@ namespace PlotLab
         {
             if (_Sequence == null || _Sequence.IsNull())
             {
-                CreateEmptyPlot();
+                if(_Sequence.Mode == PaintMode.REPAINT_PER_DATA)
+                {
+                    CreateEmptyPlot();
+                }
+                else
+                {
+                    UpdatePreNewPlot();
+                }
+                
                 return;
             }
             // repaint every data point
