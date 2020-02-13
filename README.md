@@ -1,5 +1,5 @@
 # PlotLab
-a plot library can be used in WPF project
+A drawing library for WPF framework.
 
 ## Catalog
 
@@ -12,10 +12,10 @@ a plot library can be used in WPF project
 [More Properties](#more-properties)
 
 ## Start
-We can use this library in the following ways.
-first of all,make sure you are in a wpf project.
+We can use the library as follows.
+First, make sure you are using the WPF framework.
 
-you can download and add this like a User-Control Library.and you can also download it at nuget.
+You can download and add this like an User-Control, and you can also download it at nuget.
 
 more information: 
 https://www.nuget.org/packages/PlotLab/1.0.3
@@ -24,23 +24,23 @@ https://www.nuget.org/packages/PlotLab/1.0.3
     xmlns:controler="clr-namespace:PlotLab;assembly=PlotLab"
 #### and then you can add component as follow
     <controler:PlotChart x:Name="plot"/>
-#### you have to add references in the code file
+#### add reference to code file
     using System.Drawing;
     using PlotLab;
-#### you can add data points as below:
+#### add data points in the following way
      plot._Sequence = new Sequence(new ObservableCollection<SequenceEntity>() {
             new SequenceEntity(new ObservableCollection<float>() { 1,2,3,4,5,6,7}),
             new SequenceEntity(new ObservableCollection<float>() { 0,5,3,4,5,6,7},Pens.Brown,"example 1"),
             new SequenceEntity(new ObservableCollection<float>() { 0,3,3,4,5,2,1},Pens.Green,"example 2"),
         });
-#### using 'add' is also allowed.but you must use update function to show in the screen when you use 'add' function.
+#### using 'add' is also allowed.however, when using the add function, you must use the update function to display on the screen.
     plot._Sequence.PlotChartPoints[0].Values.Add(3.4f);
     plot._Sequence.PlotChartPoints[0].Values.Add(4.4f);
     plot.UpdatePlot();
 #### you can remove a complete broken line from graph.besides,'UpdatePlot()' is needed to display on screen.
     plot.ClearDataByIndex(0);
     plot.UpdatePlot();
-#### you can removeall broken line from graph.besides,'UpdatePlot()' is needed,too.
+#### you can remove all broken line from graph.besides,'UpdatePlot()' is needed,too.
     plot.ClearData();
     plot.UpdatePlot();
 #### you will see a photo like this follow:
@@ -49,10 +49,10 @@ https://www.nuget.org/packages/PlotLab/1.0.3
 
 ## Mode
 #### here is two modes you can choose,default is REPAINT_PER_DATA
-##### if REPAINT_PER_DATA Mode is selected,update function will redraw whole paint every time you use it.
+##### if REPAINT_PER_DATA Mode is selected,the update function redraws the entire drawing each time it is used.
 
-##### but in NO_REPAINT Mode,update function will only redraw the new points.
-##### Tips:Before you choose NO_REPAINT Mode,_MinValue and _MaxValue must be set to suitable values.and you'd better set PointNum.
+##### but in NO_REPAINT Mode,update function will only draw the new points.
+##### Tips:Before you choose NO_REPAINT Mode,_MinValue and _MaxValue must be set to appropriate values.and you'd better set PointNum.
             plot._MinValue = 0;
             plot._MaxValue = 10;
             plot._Sequence = new Sequence(new ObservableCollection<SequenceEntity>() {
