@@ -1,4 +1,5 @@
 # PlotLab
+一个为WPF设计的画图组件。
 A drawing library for WPF framework.
 
 ## Catalog
