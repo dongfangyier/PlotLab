@@ -1,5 +1,6 @@
 # PlotLab
-一个为C# WPF框架设计的画图组件。通过简单的引用即可使用，该组件最新版本支持绑定。
+## 一个为C# WPF框架设计的画图组件。通过简单的引用即可使用，该组件最新版本支持绑定。
+
 A drawing library for WPF framework.
 
 ## Catalog
