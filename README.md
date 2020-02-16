@@ -73,7 +73,7 @@ https://www.nuget.org/packages/PlotLab/1.0.3
             _MinValue="{Binding Path=_MinValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
             _MaxValue="{Binding Path=_MaxValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
             _Sequence="{Binding Path=_Sequence,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-#### For convenience，when you using binding,you can set _UpdatePlot, _ClearDataByIndex and _ClearData to repleace these function include UpdatePlot(),ClearDataByIndex(index) and ClearData().
+#### For convenience，when you using binding, you can set _UpdatePlot, _ClearDataByIndex and _ClearData to repleace these function include UpdatePlot(), ClearDataByIndex(index) and ClearData().
     // add a data point
      _Sequence.PlotChartPoints[0].Values.Add(1.2f);
      _UpdatePlot = true;
